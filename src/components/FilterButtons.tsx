@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { SegmentedButtons, Chip } from 'react-native-paper';
+import { SegmentedButtons } from 'react-native-paper';
 import { FilterStatus, Priority } from '../types';
 import { Theme } from '../utils/theme';
 
@@ -43,26 +43,26 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
   ];
 
   const priorityButtons = [
-    { 
-      value: 'All', 
+    {
+      value: 'All',
       label: 'All',
       checkedColor: theme.colors.onSecondaryContainer,
       uncheckedColor: theme.colors.onSurface,
     },
-    { 
-      value: 'High', 
+    {
+      value: 'High',
       label: 'High',
       checkedColor: theme.colors.onSecondaryContainer,
       uncheckedColor: theme.colors.onSurface,
     },
-    { 
-      value: 'Medium', 
+    {
+      value: 'Medium',
       label: 'Medium',
       checkedColor: theme.colors.onSecondaryContainer,
       uncheckedColor: theme.colors.onSurface,
     },
-    { 
-      value: 'Low', 
+    {
+      value: 'Low',
       label: 'Low',
       checkedColor: theme.colors.onSecondaryContainer,
       uncheckedColor: theme.colors.onSurface,
@@ -74,7 +74,7 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
       <View style={styles.statusContainer}>
         <SegmentedButtons
           value={statusFilter}
-          onValueChange={(value) => onStatusChange(value as FilterStatus)}
+          onValueChange={value => onStatusChange(value as FilterStatus)}
           buttons={statusButtons}
           style={styles.statusButtons}
           theme={{
@@ -91,11 +91,11 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
           }}
         />
       </View>
-      
+
       <View style={styles.priorityContainer}>
         <SegmentedButtons
           value={priorityFilter}
-          onValueChange={(value) => onPriorityChange(value as Priority | 'All')}
+          onValueChange={value => onPriorityChange(value as Priority | 'All')}
           buttons={priorityButtons}
           style={styles.priorityButtons}
           theme={{

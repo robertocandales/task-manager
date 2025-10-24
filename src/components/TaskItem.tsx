@@ -29,7 +29,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
   const [editText, setEditText] = useState(task.text);
   const [editPriority, setEditPriority] = useState(task.priority);
   const getPriorityColor = (priority: Priority): string => {
-    return theme.colors.priority[priority.toLowerCase() as keyof typeof theme.colors.priority];
+    return theme.colors.priority[
+      priority.toLowerCase() as keyof typeof theme.colors.priority
+    ];
   };
 
   const getPriorityIcon = (priority: Priority): string => {
@@ -86,7 +88,9 @@ const TaskItem: React.FC<TaskItemProps> = ({
   ];
 
   return (
-    <Animated.View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
+    <Animated.View
+      style={[styles.container, { backgroundColor: theme.colors.surface }]}
+    >
       {isEditing ? (
         <View style={styles.editContainer}>
           <TextInput
@@ -106,11 +110,11 @@ const TaskItem: React.FC<TaskItemProps> = ({
               },
             }}
           />
-          
+
           <View style={styles.editPriorityContainer}>
             <SegmentedButtons
               value={editPriority}
-              onValueChange={(value) => setEditPriority(value as Priority)}
+              onValueChange={value => setEditPriority(value as Priority)}
               buttons={priorityButtons}
               style={styles.editPriorityButtons}
               theme={{
@@ -127,7 +131,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
               }}
             />
           </View>
-          
+
           <View style={styles.editActions}>
             <IconButton
               icon="check"
@@ -148,22 +152,30 @@ const TaskItem: React.FC<TaskItemProps> = ({
           <TouchableOpacity
             style={[
               styles.checkboxContainer,
+              // eslint-disable-next-line react-native/no-inline-styles
               {
                 borderColor: theme.colors.text,
-                backgroundColor: task.completed ? theme.colors.primary : 'transparent',
+                backgroundColor: task.completed
+                  ? theme.colors.primary
+                  : 'transparent',
               },
             ]}
             onPress={() => onToggle(task.id)}
             activeOpacity={0.7}
           >
             {task.completed && (
-              <Text style={[styles.checkmark, { color: theme.colors.onPrimaryContainer }]}>
+              <Text
+                style={[
+                  styles.checkmark,
+                  { color: theme.colors.onPrimaryContainer },
+                ]}
+              >
                 ✓
               </Text>
             )}
           </TouchableOpacity>
-          
-          <TouchableOpacity 
+
+          <TouchableOpacity
             style={styles.textContainer}
             onPress={handleEdit}
             activeOpacity={0.7}
@@ -177,7 +189,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
             >
               {task.text}
             </Text>
-            
+
             <View style={styles.priorityContainer}>
               <IconButton
                 icon={getPriorityIcon(task.priority)}
@@ -195,7 +207,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
               </Text>
             </View>
           </TouchableOpacity>
-          
+
           <IconButton
             icon="pencil"
             size={20}

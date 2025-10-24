@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { Task, TaskStore, FilterState, Priority, FilterStatus } from '../types';
+import { Task, TaskStore, Priority, FilterStatus } from '../types';
 import { taskApiService, ApiTask } from '../services/apiService';
 import { CONFIG, isApiAvailable } from '../config';
 
@@ -15,15 +16,6 @@ const convertApiTaskToTask = (apiTask: ApiTask): Task => ({
   createdAt: new Date(apiTask.createdAt),
 });
 
-// Convert internal task to API task format
-const convertTaskToApiTask = (task: Task): ApiTask => ({
-  id: task.id,
-  text: task.text,
-  completed: task.completed,
-  priority: task.priority,
-  createdAt: task.createdAt.toISOString(),
-});
-
 const useTaskStore = create<TaskStore>((set, get) => ({
   tasks: [],
   filters: {
@@ -33,7 +25,7 @@ const useTaskStore = create<TaskStore>((set, get) => ({
 
   addTask: async (text: string, priority: Priority) => {
     const apiAvailable = await isApiAvailable();
-    
+
     if (apiAvailable && CONFIG.USE_API) {
       try {
         // Create task via API
@@ -42,10 +34,10 @@ const useTaskStore = create<TaskStore>((set, get) => ({
           priority,
           completed: false,
         });
-        
+
         const newTask = convertApiTaskToTask(apiTask);
-        
-        set((state) => ({
+
+        set(state => ({
           tasks: [...state.tasks, newTask],
         }));
 
@@ -53,10 +45,13 @@ const useTaskStore = create<TaskStore>((set, get) => ({
         get().saveTasks();
         return;
       } catch (error) {
-        console.error('Error creating task via API, falling back to local storage:', error);
+        console.error(
+          'Error creating task via API, falling back to local storage:',
+          error
+        );
       }
     }
-    
+
     // Fallback to local storage
     const newTask: Task = {
       id: Date.now().toString(),
@@ -66,7 +61,7 @@ const useTaskStore = create<TaskStore>((set, get) => ({
       createdAt: new Date(),
     };
 
-    set((state) => ({
+    set(state => ({
       tasks: [...state.tasks, newTask],
     }));
 
@@ -78,33 +73,34 @@ const useTaskStore = create<TaskStore>((set, get) => ({
     if (!task) return;
 
     const apiAvailable = await isApiAvailable();
-    
+
     if (apiAvailable && CONFIG.USE_API) {
       try {
         // Update task via API
         const apiTask = await taskApiService.patchTask(id, {
           completed: !task.completed,
         });
-        
+
         const updatedTask = convertApiTaskToTask(apiTask);
-        
-        set((state) => ({
-          tasks: state.tasks.map((t) =>
-            t.id === id ? updatedTask : t
-          ),
+
+        set(state => ({
+          tasks: state.tasks.map(t => (t.id === id ? updatedTask : t)),
         }));
 
         // Also save to AsyncStorage as backup
         get().saveTasks();
         return;
       } catch (error) {
-        console.error('Error updating task via API, falling back to local storage:', error);
+        console.error(
+          'Error updating task via API, falling back to local storage:',
+          error
+        );
       }
     }
-    
+
     // Fallback to local storage
-    set((state) => ({
-      tasks: state.tasks.map((t) =>
+    set(state => ({
+      tasks: state.tasks.map(t =>
         t.id === id ? { ...t, completed: !t.completed } : t
       ),
     }));
@@ -114,27 +110,30 @@ const useTaskStore = create<TaskStore>((set, get) => ({
 
   deleteTask: async (id: string) => {
     const apiAvailable = await isApiAvailable();
-    
+
     if (apiAvailable && CONFIG.USE_API) {
       try {
         // Delete task via API
         await taskApiService.deleteTask(id);
-        
-        set((state) => ({
-          tasks: state.tasks.filter((task) => task.id !== id),
+
+        set(state => ({
+          tasks: state.tasks.filter(task => task.id !== id),
         }));
 
         // Also save to AsyncStorage as backup
         get().saveTasks();
         return;
       } catch (error) {
-        console.error('Error deleting task via API, falling back to local storage:', error);
+        console.error(
+          'Error deleting task via API, falling back to local storage:',
+          error
+        );
       }
     }
-    
+
     // Fallback to local storage
-    set((state) => ({
-      tasks: state.tasks.filter((task) => task.id !== id),
+    set(state => ({
+      tasks: state.tasks.filter(task => task.id !== id),
     }));
 
     get().saveTasks();
@@ -142,7 +141,7 @@ const useTaskStore = create<TaskStore>((set, get) => ({
 
   editTask: async (id: string, text: string, priority: Priority) => {
     const apiAvailable = await isApiAvailable();
-    
+
     if (apiAvailable && CONFIG.USE_API) {
       try {
         // Update task via API
@@ -150,26 +149,27 @@ const useTaskStore = create<TaskStore>((set, get) => ({
           text: text.trim(),
           priority,
         });
-        
+
         const updatedTask = convertApiTaskToTask(apiTask);
-        
-        set((state) => ({
-          tasks: state.tasks.map((t) =>
-            t.id === id ? updatedTask : t
-          ),
+
+        set(state => ({
+          tasks: state.tasks.map(t => (t.id === id ? updatedTask : t)),
         }));
 
         // Also save to AsyncStorage as backup
         get().saveTasks();
         return;
       } catch (error) {
-        console.error('Error updating task via API, falling back to local storage:', error);
+        console.error(
+          'Error updating task via API, falling back to local storage:',
+          error
+        );
       }
     }
-    
+
     // Fallback to local storage
-    set((state) => ({
-      tasks: state.tasks.map((t) =>
+    set(state => ({
+      tasks: state.tasks.map(t =>
         t.id === id ? { ...t, text: text.trim(), priority } : t
       ),
     }));
@@ -178,13 +178,13 @@ const useTaskStore = create<TaskStore>((set, get) => ({
   },
 
   setStatusFilter: (status: FilterStatus) => {
-    set((state) => ({
+    set(state => ({
       filters: { ...state.filters, status },
     }));
   },
 
   setPriorityFilter: (priority: Priority | 'All') => {
-    set((state) => ({
+    set(state => ({
       filters: { ...state.filters, priority },
     }));
   },
@@ -192,29 +192,32 @@ const useTaskStore = create<TaskStore>((set, get) => ({
   clearCompleted: async () => {
     const completedTasks = get().tasks.filter(task => task.completed);
     const apiAvailable = await isApiAvailable();
-    
+
     if (apiAvailable && CONFIG.USE_API) {
       try {
         // Delete all completed tasks via API
         await Promise.all(
           completedTasks.map(task => taskApiService.deleteTask(task.id))
         );
-        
-        set((state) => ({
-          tasks: state.tasks.filter((task) => !task.completed),
+
+        set(state => ({
+          tasks: state.tasks.filter(task => !task.completed),
         }));
 
         // Also save to AsyncStorage as backup
         get().saveTasks();
         return;
       } catch (error) {
-        console.error('Error clearing completed tasks via API, falling back to local storage:', error);
+        console.error(
+          'Error clearing completed tasks via API, falling back to local storage:',
+          error
+        );
       }
     }
-    
+
     // Fallback to local storage
-    set((state) => ({
-      tasks: state.tasks.filter((task) => !task.completed),
+    set(state => ({
+      tasks: state.tasks.filter(task => !task.completed),
     }));
 
     get().saveTasks();
@@ -222,23 +225,26 @@ const useTaskStore = create<TaskStore>((set, get) => ({
 
   loadTasks: async () => {
     const apiAvailable = await isApiAvailable();
-    
+
     if (apiAvailable && CONFIG.USE_API) {
       try {
         // Try to load from API first
         const apiTasks = await taskApiService.getTasks();
         const tasks = apiTasks.map(convertApiTaskToTask);
-        
+
         set({ tasks });
-        
+
         // Also save to AsyncStorage as backup
         get().saveTasks();
         return;
       } catch (error) {
-        console.error('Error loading tasks from API, falling back to AsyncStorage:', error);
+        console.error(
+          'Error loading tasks from API, falling back to AsyncStorage:',
+          error
+        );
       }
     }
-    
+
     // Fallback to AsyncStorage
     try {
       const storedTasks = await AsyncStorage.getItem(STORAGE_KEY);

@@ -56,7 +56,7 @@ export default [
       'react-native/no-unused-styles': 'warn',
       'react-native/split-platform-components': 'warn',
       'react-native/no-inline-styles': 'warn',
-      'react-native/no-color-literals': 'warn',
+      'react-native/no-color-literals': 'off', // Allow color literals
       'react-native/no-raw-text': 'off', // Allow raw text in some cases
 
       // React Hooks rules

@@ -3,7 +3,7 @@
     {
       "id": "3",
       "text": "Write documentation",
-      "completed": true,
+      "completed": false,
       "priority": "Low",
       "createdAt": "2024-01-13T09:15:00.000Z"
     },

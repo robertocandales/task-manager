@@ -1,82 +1,149 @@
-# Task Manager App
+# 📱 Task Manager App
 
-A modern React Native task management application built with Expo, featuring comprehensive task management capabilities, dark mode support, and smooth animations.
+A modern, feature-rich React Native task management application built with TypeScript, demonstrating advanced mobile development practices and clean architecture principles.
+
+![React Native](https://img.shields.io/badge/React_Native-0.81.5-blue.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue.svg)
+![Expo](https://img.shields.io/badge/Expo-54.0.20-black.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
 ## 🚀 Features
 
-### Core Requirements ✅
+### Core Functionality
 
-- **Add Tasks**: Text input with priority selection and validation
-- **Task List**: Display tasks with checkboxes, delete buttons, and priority badges
-- **Filtering System**: Filter by status (All, Completed, Pending) and priority (High, Medium, Low)
-- **Data Persistence**: AsyncStorage integration with error handling
-- **Global State Management**: Zustand store for efficient state management
+- ✅ **Task Management**: Create, edit, delete, and toggle task completion
+- ✅ **Priority System**: High, Medium, Low priority levels with visual indicators
+- ✅ **Smart Filtering**: Filter by status (All, Pending, Completed) and priority
+- ✅ **Real-time Search**: Instant task filtering and sorting
+- ✅ **Data Persistence**: Automatic save/load with AsyncStorage
+- ✅ **REST API Integration**: Seamless API integration with local storage fallback
 
-### Bonus Features ✨
+### Advanced Features
 
-- **Dark Mode Toggle**: Complete theme switching with persistent preferences
-- **Smooth Animations**: LayoutAnimation for adding/removing tasks
-- **Pull-to-Refresh**: Refresh functionality for task list
-- **Task Counter**: Real-time statistics showing total, pending, completed tasks and completion percentage
-- **Modern UI**: Material Design components with React Native Paper
-- **Responsive Design**: Optimized for both iOS and Android
+- 🎨 **Dark/Light Mode**: Complete theme switching with persistent preferences
+- 🔄 **Pull-to-Refresh**: Refresh tasks with smooth animations
+- 📊 **Task Statistics**: Live counters for total, completed, and pending tasks
+- ✏️ **Inline Editing**: Edit tasks directly in the list with priority selection
+- 🎭 **Smooth Animations**: Layout animations for task operations
+- 🌐 **API Status Indicator**: Visual feedback for online/offline state
+- 📱 **Responsive Design**: Optimized for both iOS and Android
 
-## 📱 Screenshots
+### Developer Experience
 
-The app features a clean, modern interface with:
-
-- Task counter dashboard
-- Filter controls for status and priority
-- Individual task items with priority indicators
-- Floating action button for adding tasks
-- Dark/light mode toggle
+- 🔧 **ESLint & Prettier**: Automated code quality and formatting
+- 🐕 **Husky Pre-commit Hooks**: Enforced code standards
+- 🏗️ **Clean Architecture**: Separation of concerns with organized folder structure
+- 📝 **TypeScript**: Full type safety and IntelliSense support
+- 🧪 **Mock API**: json-server for development and testing
 
 ## 🛠️ Tech Stack
 
-- **React Native** with Expo
-- **TypeScript** for type safety
-- **Zustand** for state management
-- **React Native Paper** for UI components
-- **AsyncStorage** for data persistence
-- **React Native Reanimated** for animations
+### Frontend
 
-## 📦 Dependencies
+- **React Native** 0.81.5 - Cross-platform mobile development
+- **TypeScript** 5.9.2 - Type-safe JavaScript
+- **Expo** 54.0.20 - Development platform and tools
+- **React Native Paper** 5.14.5 - Material Design components
+- **React Navigation** 7.x - Navigation library
 
-```json
-{
-  "@react-native-async-storage/async-storage": "2.2.0",
-  "@react-navigation/native": "^7.1.18",
-  "@react-navigation/native-stack": "^7.5.1",
-  "expo": "~54.0.20",
-  "expo-status-bar": "~3.0.8",
-  "react": "19.1.0",
-  "react-native": "0.81.5",
-  "react-native-gesture-handler": "~2.28.0",
-  "react-native-paper": "^5.14.5",
-  "react-native-reanimated": "~4.1.1",
-  "react-native-safe-area-context": "~5.6.0",
-  "react-native-screens": "~4.16.0",
-  "react-native-vector-icons": "^10.3.0",
-  "zustand": "^5.0.8"
+### State Management & Data
+
+- **Zustand** 5.0.8 - Lightweight state management
+- **AsyncStorage** 2.2.0 - Local data persistence
+- **json-server** 1.0.0-beta.3 - Mock REST API
+
+### Development Tools
+
+- **ESLint** 9.38.0 - Code linting and quality
+- **Prettier** 3.6.2 - Code formatting
+- **Husky** 9.1.7 - Git hooks management
+- **lint-staged** 16.2.6 - Pre-commit linting
+
+## 📁 Project Structure
+
+```
+TaskManagerApp/
+├── src/
+│   ├── components/          # Reusable UI components
+│   │   ├── AddTaskForm.tsx  # Task creation form
+│   │   ├── TaskItem.tsx     # Individual task component
+│   │   ├── FilterButtons.tsx # Task filtering controls
+│   │   ├── TaskCounter.tsx  # Statistics display
+│   │   └── ApiStatus.tsx    # API connection indicator
+│   ├── screens/             # Screen components
+│   │   └── TaskScreen.tsx   # Main task management screen
+│   ├── navigation/          # Navigation configuration
+│   │   └── AppNavigator.tsx # App navigation setup
+│   ├── store/               # State management
+│   │   ├── taskStore.ts     # Main task store (smart API/local)
+│   │   ├── taskStoreWithAPI.ts # API-specific store
+│   │   ├── taskStoreLocal.ts # Local storage store
+│   │   └── themeStore.ts    # Theme management
+│   ├── services/            # API services
+│   │   └── apiService.ts    # REST API client
+│   ├── utils/               # Utility functions
+│   │   ├── taskUtils.ts     # Task filtering/sorting logic
+│   │   └── theme.ts         # Theme definitions
+│   ├── types/               # TypeScript type definitions
+│   │   └── index.ts         # Shared interfaces
+│   └── config/              # Configuration
+│       └── index.ts          # App configuration
+├── .husky/                  # Git hooks
+├── eslint.config.js         # ESLint configuration
+├── .prettierrc              # Prettier configuration
+├── db.json                  # Mock API database
+└── README.md                # Project documentation
+```
+
+## 🏗️ Architecture Highlights
+
+### Smart Store Pattern
+
+The application implements a **hybrid storage system** that automatically detects API availability and switches between REST API and local storage:
+
+```typescript
+// Automatic API detection and fallback
+const apiAvailable = await isApiAvailable();
+if (apiAvailable && CONFIG.USE_API) {
+  // Use REST API
+  const apiTask = await taskApiService.createTask(taskData);
+} else {
+  // Fallback to AsyncStorage
+  await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
 }
 ```
+
+### Clean Architecture Principles
+
+- **Separation of Concerns**: Components, screens, navigation, and business logic are properly separated
+- **Dependency Injection**: Services are injected through the store layer
+- **Single Responsibility**: Each module has a clear, focused purpose
+- **Testability**: Pure functions and isolated components for easy testing
+
+### State Management Strategy
+
+- **Zustand**: Chosen for its simplicity and TypeScript support
+- **Persistence**: Automatic data persistence with error handling
+- **Optimistic Updates**: Immediate UI updates with background sync
+- **Error Recovery**: Graceful fallback mechanisms
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
+- Node.js 18+
 - npm or yarn
 - Expo CLI (`npm install -g @expo/cli`)
-- iOS Simulator (for iOS development) or Android Studio (for Android development)
+- iOS Simulator (for iOS development)
+- Android Studio (for Android development)
 
 ### Installation
 
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
-   cd TaskManagerApp
+   git clone https://github.com/yourusername/taskmanagerapp.git
+   cd taskmanagerapp
    ```
 
 2. **Install dependencies**
@@ -85,27 +152,13 @@ The app features a clean, modern interface with:
    npm install
    ```
 
-3. **Start the mock API server**
-
-   ```bash
-   npm run api
-   ```
-
-   This will start json-server on `http://localhost:3001` with sample data.
-
-4. **Start the development server** (in a new terminal)
+3. **Start the development server**
 
    ```bash
    npm start
    ```
 
-5. **Run both API and app simultaneously**
-
-   ```bash
-   npm run dev
-   ```
-
-6. **Run on specific platforms**
+4. **Run on specific platforms**
 
    ```bash
    # iOS
@@ -118,186 +171,114 @@ The app features a clean, modern interface with:
    npm run web
    ```
 
-### 🌐 Mock REST API
+### Mock API Setup (Optional)
 
-The project includes a **json-server** setup for testing and development:
+1. **Start the mock API server**
 
-- **API Endpoint**: `http://localhost:3001`
-- **Sample Data**: Pre-loaded with 5 example tasks
-- **Available Routes**:
-  - `GET /tasks` - Get all tasks
-  - `GET /tasks/:id` - Get specific task
-  - `POST /tasks` - Create new task
-  - `PUT /tasks/:id` - Update task
-  - `PATCH /tasks/:id` - Partial update
-  - `DELETE /tasks/:id` - Delete task
-  - `GET /tasks?completed=true` - Filter by status
-  - `GET /tasks?priority=High` - Filter by priority
-  - `GET /tasks?_sort=createdAt&_order=desc` - Sort tasks
+   ```bash
+   npm run api
+   ```
 
-### 🌐 Mock REST API Integration
+2. **Run with API integration**
+   ```bash
+   npm run dev
+   ```
 
-The project includes **full REST API integration** with automatic fallback:
+The app will automatically detect the API and use it for data operations.
 
-- **Smart API Detection**: Automatically detects if json-server is running
-- **Seamless Fallback**: Falls back to AsyncStorage if API is unavailable
-- **Real-time Status**: Shows API connection status in the UI
-- **Hybrid Storage**: Uses API as primary, AsyncStorage as backup
-- **Error Handling**: Graceful error handling with user feedback
+## 📱 Usage
 
-**API Features**:
+### Basic Operations
 
-- ✅ **CRUD Operations**: Create, Read, Update, Delete tasks
-- ✅ **Real-time Sync**: Changes sync with API immediately
-- ✅ **Offline Support**: Works without internet connection
-- ✅ **Status Indicator**: Visual feedback on API connection
-- ✅ **Automatic Retry**: Smart retry logic for failed requests
+1. **Add Task**: Tap the + button to create a new task
+2. **Edit Task**: Tap on any task text or the pencil icon to edit
+3. **Complete Task**: Tap the checkbox to mark as complete
+4. **Delete Task**: Tap the trash icon to remove a task
+5. **Filter Tasks**: Use the filter buttons to view specific tasks
 
-**API Service**: Complete REST API integration in `src/services/apiService.ts` with TypeScript support and error handling.
+### Advanced Features
 
-## 📁 Project Structure
+- **Theme Toggle**: Tap the sun/moon icon to switch themes
+- **Clear Completed**: Tap the sweep icon to remove all completed tasks
+- **Pull to Refresh**: Pull down on the task list to refresh data
+- **Priority Selection**: Choose task priority when creating or editing
 
-```
-TaskManagerApp/
-├── src/
-│   ├── components/          # Reusable UI components
-│   │   ├── AddTaskForm.tsx  # Task creation form
-│   │   ├── TaskItem.tsx     # Individual task display
-│   │   ├── FilterButtons.tsx # Filter controls
-│   │   └── TaskCounter.tsx  # Statistics dashboard
-│   ├── screens/            # Screen components (Business Logic)
-│   │   ├── TaskScreen.tsx   # Main task management screen
-│   │   └── index.ts         # Screen exports
-│   ├── navigation/          # Navigation configuration
-│   │   ├── AppNavigator.tsx # Main navigation setup
-│   │   └── index.ts         # Navigation exports
-│   ├── store/              # State management
-│   │   ├── taskStore.ts     # Main task store (Zustand)
-│   │   └── themeStore.ts    # Theme management
-│   ├── types/               # TypeScript definitions
-│   │   └── index.ts         # Type definitions
-│   └── utils/               # Utility functions
-│       ├── taskUtils.ts     # Task filtering and sorting
-│       └── theme.ts         # Theme configurations
-│   └── services/            # API services
-│       ├── apiService.ts     # REST API integration
-│       └── index.ts          # Service exports
-├── App.tsx                  # Root component (Clean & Minimal)
-├── db.json                  # Mock database for json-server
-├── ARCHITECTURE.md          # Detailed architecture documentation
-├── package.json
-└── README.md
+## 🧪 Testing
+
+### Manual Testing
+
+- **API Integration**: Test with and without the mock API running
+- **Theme Persistence**: Verify theme preference is saved between sessions
+- **Data Persistence**: Confirm tasks persist after app restart
+- **Error Handling**: Test network failures and storage errors
+
+### Code Quality
+
+```bash
+# Run linting
+npm run lint
+
+# Auto-fix issues
+npm run lint:fix
+
+# Check for errors only
+npm run lint:check
 ```
 
-## 🏗️ Architecture Highlights
+## 🔧 Configuration
 
-### **Clean Architecture Approach**
+### ESLint Configuration
 
-- **App.tsx**: Minimal root component focused only on providers and navigation
-- **Screens**: Business logic separated from UI components
-- **Navigation**: Centralized routing configuration for scalability
-- **Components**: Pure UI components with clear separation of concerns
-- **Store**: Global state management isolated from UI logic
+The project uses a comprehensive ESLint setup with:
 
-### **Scalability Benefits**
+- TypeScript support
+- React Native specific rules
+- React Hooks validation
+- Import organization
+- Code quality enforcement
 
-- Easy to add new screens without modifying existing code
-- Navigation can be extended with tabs, stacks, or drawers
-- Components are reusable across different screens
-- Store can be easily extended with new features
-- Clear file organization for team collaboration
+### Prettier Configuration
 
-> 📖 **Detailed Architecture Documentation**: See [ARCHITECTURE.md](./ARCHITECTURE.md) for comprehensive explanation of design decisions and interview talking points.
+Consistent code formatting with:
 
-## 🎯 State Management Choice: Zustand
+- Single quotes
+- Semicolons
+- 2-space indentation
+- 80 character line width
 
-I chose **Zustand** over Context API for the following reasons:
+## 📊 Performance Considerations
 
-### Why Zustand?
+### Optimizations Implemented
 
-- **Minimal Boilerplate**: Much less code compared to Context API
-- **Better Performance**: No unnecessary re-renders
-- **TypeScript Support**: Excellent type safety out of the box
-- **DevTools Integration**: Easy debugging with Redux DevTools
-- **Persistence**: Built-in support for AsyncStorage
-- **Simplicity**: Easy to understand and maintain
+- **FlatList**: Efficient rendering for large task lists
+- **LayoutAnimation**: Smooth animations for task operations
+- **Key Extractor**: Optimized FlatList performance with unique keys
 
-### Implementation Details
+### Memory Management
 
-- Single store for all task-related state
-- Separate theme store for UI preferences
-- Automatic persistence to AsyncStorage
-- Optimized selectors to prevent unnecessary re-renders
+- **Efficient State Updates**: Zustand's immutable state updates
+- **Smart API Fallback**: Automatic switching between API and local storage
 
-## 🔧 Key Features Implementation
+## 🚀 Deployment
 
-### Task Management
+### Building for Production
 
-- **Add Tasks**: Form validation, priority selection, automatic clearing
-- **Toggle Completion**: One-tap task completion with visual feedback
-- **Delete Tasks**: Confirmation dialog with smooth animations
-- **Bulk Operations**: Clear all completed tasks with confirmation
+1. **Configure app.json** with your app details
+2. **Build for iOS**
+   ```bash
+   expo build:ios
+   ```
+3. **Build for Android**
+   ```bash
+   expo build:android
+   ```
 
-### Filtering System
+### App Store Submission
 
-- **Status Filters**: All, Completed, Pending with live counts
-- **Priority Filters**: High, Medium, Low, All
-- **Combined Filtering**: Both filters work together seamlessly
-- **Real-time Updates**: Instant filtering without delays
-
-### Data Persistence
-
-- **AsyncStorage Integration**: Automatic save/load on app start
-- **Error Handling**: Graceful fallback if storage fails
-- **Performance**: Efficient serialization/deserialization
-- **Data Integrity**: Proper date handling and validation
-
-### Dark Mode
-
-- **Complete Theme System**: All components support theming
-- **Persistent Preferences**: Theme choice saved across app restarts
-- **Smooth Transitions**: Instant theme switching
-- **Accessibility**: High contrast colors for better readability
-
-## 🎨 UI/UX Features
-
-### Modern Design
-
-- Material Design 3 components
-- Consistent spacing and typography
-- Smooth animations and transitions
-- Responsive layout for different screen sizes
-
-### User Experience
-
-- Intuitive navigation with floating action button
-- Clear visual hierarchy with priority indicators
-- Confirmation dialogs for destructive actions
-- Empty state with helpful messaging
-- Pull-to-refresh functionality
-
-### Accessibility
-
-- High contrast colors in both themes
-- Clear visual feedback for interactions
-- Proper touch targets for mobile devices
-- Screen reader friendly components
-
-## 🐛 Known Issues & Limitations
-
-- **iOS Simulator**: Some animations may appear different on iOS Simulator vs real device
-- **Android Edge Cases**: Layout animations require additional configuration on older Android versions
-- **Storage Limits**: AsyncStorage has size limits (typically 6MB), but this is sufficient for task data
-
-## 🔮 Future Enhancements
-
-- **Task Categories**: Add custom categories/tags
-- **Due Dates**: Set and track task deadlines
-- **Task Sharing**: Export/import task lists
-- **Offline Sync**: Cloud synchronization when online
-- **Widgets**: Home screen widgets for quick task access
-- **Voice Input**: Add tasks using voice commands
-- **Task Templates**: Save and reuse common task patterns
+- Follow Expo's deployment guide
+- Ensure all assets are optimized
+- Test on physical devices
+- Complete app store metadata
 
 ## 🤝 Contributing
 
@@ -307,14 +288,44 @@ I chose **Zustand** over Context API for the following reasons:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+### Code Standards
+
+- Follow the existing code style
+- Write meaningful commit messages
+- Add tests for new features
+- Update documentation as needed
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 
-Built as a React Native code challenge demonstrating modern mobile development practices, state management, and user experience design.
+**Roberto Candales**
+
+- GitHub: [@robertocandales](https://github.com/robertocandales)
+- LinkedIn: [Roberto Candales](https://linkedin.com/in/robertocandales)
+
+## 🙏 Acknowledgments
+
+- React Native community for excellent documentation
+- Expo team for the amazing development platform
+- React Native Paper for beautiful Material Design components
+- Zustand for simple and effective state management
 
 ---
 
-**Happy Task Managing! 🎉**
+## 📞 Contact
+
+For questions about this project or potential opportunities, please reach out:
+
+- **Email**: roberto@example.com
+- **LinkedIn**: [Roberto Candales](https://linkedin.com/in/robertocandales)
+- **Portfolio**: [robertocandales.dev](https://robertocandales.dev)
+
+---
+
+<div align="center">
+  <p>Built with ❤️ using React Native</p>
+  <p>⭐ Star this repo if you found it helpful!</p>
+</div>

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // API Service for Task Management
 // This demonstrates how to integrate with a REST API using json-server
 
@@ -144,7 +145,9 @@ class TaskApiService {
   // GET /tasks?completed=true - Filter tasks by completion status
   async getTasksByStatus(completed: boolean): Promise<ApiTask[]> {
     try {
-      const response = await fetch(`${this.baseUrl}/tasks?completed=${completed}`);
+      const response = await fetch(
+        `${this.baseUrl}/tasks?completed=${completed}`
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -156,9 +159,13 @@ class TaskApiService {
   }
 
   // GET /tasks?priority=High - Filter tasks by priority
-  async getTasksByPriority(priority: 'High' | 'Medium' | 'Low'): Promise<ApiTask[]> {
+  async getTasksByPriority(
+    priority: 'High' | 'Medium' | 'Low'
+  ): Promise<ApiTask[]> {
     try {
-      const response = await fetch(`${this.baseUrl}/tasks?priority=${priority}`);
+      const response = await fetch(
+        `${this.baseUrl}/tasks?priority=${priority}`
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -170,9 +177,14 @@ class TaskApiService {
   }
 
   // GET /tasks?_sort=createdAt&_order=desc - Sort tasks by creation date
-  async getTasksSorted(sortBy: string = 'createdAt', order: 'asc' | 'desc' = 'desc'): Promise<ApiTask[]> {
+  async getTasksSorted(
+    sortBy: string = 'createdAt',
+    order: 'asc' | 'desc' = 'desc'
+  ): Promise<ApiTask[]> {
     try {
-      const response = await fetch(`${this.baseUrl}/tasks?_sort=${sortBy}&_order=${order}`);
+      const response = await fetch(
+        `${this.baseUrl}/tasks?_sort=${sortBy}&_order=${order}`
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

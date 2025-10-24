@@ -59,6 +59,10 @@ A modern, feature-rich React Native task management application built with TypeS
 - **Husky** 9.1.7 - Git hooks management
 - **lint-staged** 16.2.6 - Pre-commit linting
 
+### Demo
+
+![taskManager](https://github.com/user-attachments/assets/f9e939ab-21bc-4eb0-b920-d1c48fabe475)
+
 ## 📁 Project Structure
 
 ```

@@ -105,9 +105,6 @@ const TaskScreen: React.FC = () => {
   };
 
   const handleClearCompleted = () => {
-    console.log('Clear completed button pressed');
-    console.log('Completed tasks count:', taskCounts.completed);
-
     if (taskCounts.completed === 0) {
       Alert.alert(
         'No Completed Tasks',
@@ -125,7 +122,6 @@ const TaskScreen: React.FC = () => {
           text: 'Clear',
           style: 'destructive',
           onPress: () => {
-            console.log('Clearing completed tasks...');
             LayoutAnimation.configureNext(
               LayoutAnimation.Presets.easeInEaseOut
             );

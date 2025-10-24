@@ -321,16 +321,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📞 Contact
-
-For questions about this project or potential opportunities, please reach out:
-
-- **Email**: roberto@example.com
-- **LinkedIn**: [Roberto Candales](https://linkedin.com/in/robertocandales)
-- **Portfolio**: [robertocandales.dev](https://robertocandales.dev)
-
----
-
 <div align="center">
   <p>Built with ❤️ using React Native</p>
   <p>⭐ Star this repo if you found it helpful!</p>

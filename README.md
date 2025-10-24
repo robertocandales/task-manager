@@ -128,6 +128,66 @@ if (apiAvailable && CONFIG.USE_API) {
 
 ### State Management Strategy
 
+#### Why Zustand over Context API?
+
+**Zustand** was chosen over React's Context API for the following reasons:
+
+**🚀 Performance Benefits:**
+
+- **No Provider Wrapping**: Zustand doesn't require wrapping components in providers, reducing component tree complexity
+- **Selective Re-renders**: Only components using specific state slices re-render, preventing unnecessary updates
+- **No Context Propagation**: Eliminates the performance overhead of context value propagation through the component tree
+
+**💻 Developer Experience:**
+
+- **TypeScript First**: Excellent TypeScript support with minimal boilerplate
+- **Simple API**: Clean, intuitive API that's easy to learn and maintain
+- **Minimal Boilerplate**: Less code compared to Context API + useReducer patterns
+- **DevTools Support**: Built-in Redux DevTools integration for debugging
+
+**🏗️ Architecture Advantages:**
+
+- **Separation of Concerns**: Business logic is separated from UI components
+- **Testability**: Stores can be tested independently without React components
+- **Scalability**: Easy to add new stores and manage complex state relationships
+- **Persistence**: Built-in support for state persistence with minimal configuration
+
+**📊 Comparison with Context API:**
+
+| Feature     | Zustand   | Context API                         |
+| ----------- | --------- | ----------------------------------- |
+| Boilerplate | Minimal   | High (Provider + Context + Reducer) |
+| Performance | Optimized | Can cause unnecessary re-renders    |
+| TypeScript  | Excellent | Requires additional setup           |
+| DevTools    | Built-in  | Requires additional setup           |
+| Testing     | Easy      | Complex (needs provider setup)      |
+| Bundle Size | 2.9kb     | Built-in (but more code needed)     |
+
+**Implementation Example:**
+
+```typescript
+// Zustand - Simple and clean
+const useTaskStore = create<TaskStore>(set => ({
+  tasks: [],
+  addTask: task =>
+    set(state => ({
+      tasks: [...state.tasks, task],
+    })),
+}));
+
+// Context API - More verbose
+const TaskContext = createContext<TaskContextType | undefined>(undefined);
+const TaskProvider = ({ children }: { children: ReactNode }) => {
+  const [state, dispatch] = useReducer(taskReducer, initialState);
+  // ... more boilerplate
+};
+```
+
+**Decision Rationale:**
+For a task management app requiring frequent state updates, complex filtering, and API integration, Zustand provides the optimal balance of simplicity, performance, and maintainability. The Context API would require significantly more boilerplate code and could lead to performance issues with frequent re-renders.
+
+#### Implementation Details
+
 - **Zustand**: Chosen for its simplicity and TypeScript support
 - **Persistence**: Automatic data persistence with error handling
 - **Optimistic Updates**: Immediate UI updates with background sync

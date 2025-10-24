@@ -7,6 +7,12 @@ A modern, feature-rich React Native task management application built with TypeS
 ![Expo](https://img.shields.io/badge/Expo-54.0.20-black.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
+## 📱 Demo
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/f9e939ab-21bc-4eb0-b920-d1c48fabe475" alt="Task Manager App Demo" width="300" />
+</div>
+
 ## 🚀 Features
 
 ### Core Functionality
@@ -58,10 +64,6 @@ A modern, feature-rich React Native task management application built with TypeS
 - **Prettier** 3.6.2 - Code formatting
 - **Husky** 9.1.7 - Git hooks management
 - **lint-staged** 16.2.6 - Pre-commit linting
-
-### Demo
-
-![taskManager](https://github.com/user-attachments/assets/f9e939ab-21bc-4eb0-b920-d1c48fabe475)
 
 ## 📁 Project Structure
 

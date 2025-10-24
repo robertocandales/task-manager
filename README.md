@@ -208,8 +208,8 @@ For a task management app requiring frequent state updates, complex filtering, a
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/taskmanagerapp.git
-   cd taskmanagerapp
+   git clone https://github.com/robertocandales/task-manager.git
+   cd task-manager
    ```
 
 2. **Install dependencies**

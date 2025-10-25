@@ -9,8 +9,18 @@ TaskManagerApp/
 │   │   ├── AddTaskForm.tsx  # Task creation form
 │   │   ├── TaskItem.tsx     # Individual task display
 │   │   ├── FilterButtons.tsx # Filter controls
-│   │   └── TaskCounter.tsx  # Statistics dashboard
-│   ├── screens/            # Screen components (Business Logic)
+│   │   ├── TaskCounter.tsx  # Statistics dashboard
+│   │   ├── ApiStatus.tsx    # API connection status
+│   │   ├── EmptyState.tsx   # Empty state component
+│   │   ├── TaskHeader.tsx   # Reusable header component
+│   │   ├── TaskList.tsx     # Task list with FAB
+│   │   └── index.ts         # Component exports
+│   ├── hooks/               # Custom hooks (Business Logic)
+│   │   ├── useTaskOperations.ts # Task CRUD operations
+│   │   ├── useTaskScreenState.ts # UI state management
+│   │   ├── useTaskData.ts   # Data processing & filtering
+│   │   └── index.ts         # Hook exports
+│   ├── screens/            # Screen components (Composition Layer)
 │   │   ├── TaskScreen.tsx   # Main task management screen
 │   │   └── index.ts         # Screen exports
 │   ├── navigation/          # Navigation configuration
@@ -19,12 +29,17 @@ TaskManagerApp/
 │   ├── store/              # State management
 │   │   ├── taskStore.ts     # Main task store (Zustand)
 │   │   └── themeStore.ts    # Theme management
+│   ├── services/           # API services
+│   │   ├── apiService.ts    # REST API client
+│   │   └── index.ts         # Service exports
+│   ├── config/             # Configuration
+│   │   └── index.ts         # App configuration
 │   ├── types/               # TypeScript definitions
 │   │   └── index.ts         # Type definitions
 │   └── utils/               # Utility functions
 │       ├── taskUtils.ts     # Task filtering and sorting
 │       └── theme.ts         # Theme configurations
-├── App.tsx                  # Root component (Clean & Minimal)
+├── App.tsx                  # Root component (Initialization)
 ├── package.json
 └── README.md
 ```
@@ -33,11 +48,13 @@ TaskManagerApp/
 
 ### 1. **Separation of Concerns**
 
-- **App.tsx**: Only handles app-level providers and navigation setup
-- **Screens**: Contains business logic and screen-specific state
+- **App.tsx**: Handles app initialization and global providers
+- **Custom Hooks**: Encapsulate business logic and state management
+- **Screens**: Composition layer that orchestrates hooks and components
 - **Components**: Pure UI components with props-based communication
 - **Navigation**: Centralized routing configuration
 - **Store**: Global state management separated from UI logic
+- **Services**: API communication layer
 
 ### 2. **Scalability**
 
@@ -53,11 +70,18 @@ TaskManagerApp/
 - TypeScript ensures type safety across all modules
 - Consistent import/export patterns
 
-### 4. **Testability**
+### 4. **Professional Patterns**
+
+- **Custom Hooks**: Business logic separated from UI components
+- **Composition over Inheritance**: Components composed of smaller pieces
+- **Single Responsibility**: Each hook/component has one clear purpose
+- **Reusability**: Components and hooks can be used across the app
+
+### 5. **Testability**
 
 - Components can be tested in isolation
-- Business logic in screens can be unit tested
-- Store logic can be tested independently
+- Custom hooks can be unit tested independently
+- Store logic can be tested separately
 - Navigation can be tested with mock screens
 
 ## 🎯 Interview Talking Points
@@ -65,21 +89,27 @@ TaskManagerApp/
 ### **Why This Architecture?**
 
 1. **Clean App.tsx**:
-   - Root component is minimal and focused only on app-level concerns
+   - Root component handles initialization and global providers
    - Easy to understand what the app does at a glance
    - Follows React best practices for root components
 
-2. **Screen-Based Organization**:
-   - Each screen encapsulates its own business logic
+2. **Custom Hooks Pattern**:
+   - Business logic separated from UI components
+   - Reusable across different screens and components
+   - Easy to test and maintain independently
+   - Follows React's composition patterns
+
+3. **Screen-Based Organization**:
+   - Screens act as composition layers orchestrating hooks and components
    - Makes it easy to add new features (e.g., Settings screen, Profile screen)
    - Follows mobile app development patterns
 
-3. **Navigation Separation**:
+4. **Navigation Separation**:
    - Navigation logic is centralized and reusable
    - Easy to implement complex navigation patterns (tabs, modals, deep linking)
    - Can easily add authentication flows or onboarding screens
 
-4. **Component Reusability**:
+5. **Component Reusability**:
    - UI components are pure and reusable
    - Can be easily moved to a component library
    - Follows composition over inheritance principles

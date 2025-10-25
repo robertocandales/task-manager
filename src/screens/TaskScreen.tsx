@@ -1,35 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  RefreshControl,
-  Alert,
-  LayoutAnimation,
-  Platform,
-  UIManager,
-} from 'react-native';
-import { Appbar, FAB, Portal, IconButton, Modal } from 'react-native-paper';
+import React from 'react';
+import { StyleSheet, Platform, UIManager } from 'react-native';
+import { Modal } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Components
 import AddTaskForm from '../components/AddTaskForm';
-import TaskItem from '../components/TaskItem';
+import { TaskList } from '../components/TaskList';
 import FilterButtons from '../components/FilterButtons';
 import TaskCounter from '../components/TaskCounter';
 import ApiStatus from '../components/ApiStatus';
+import { TaskHeader } from '../components/TaskHeader';
+
+// Custom Hooks
+import { useTaskOperations, useTaskScreenState, useTaskData } from '../hooks';
 
 // Store and Utils
 import useTaskStore from '../store/taskStore';
 import useThemeStore from '../store/themeStore';
-import {
-  filterTasks,
-  getTaskCounts,
-  sortTasksByPriority,
-} from '../utils/taskUtils';
 import { lightTheme, darkTheme, Theme } from '../utils/theme';
-import { Task, Priority } from '../types';
+import { Priority } from '../types';
 
 // Enable LayoutAnimation on Android
 if (
@@ -39,149 +28,54 @@ if (
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
+/**
+ * Main Task Screen Component
+ *
+ * Architecture:
+ * - Uses custom hooks to separate business logic from UI
+ * - Composed of smaller, reusable components
+ * - Follows single responsibility principle
+ * - Clean separation of concerns
+ */
 const TaskScreen: React.FC = () => {
+  // Custom hooks for separated concerns
+  const { filteredTasks, taskCounts } = useTaskData();
   const {
-    tasks,
-    filters,
-    addTask,
-    toggleTask,
-    deleteTask,
-    editTask,
-    setStatusFilter,
-    setPriorityFilter,
-    clearCompleted,
-    loadTasks,
-  } = useTaskStore();
+    refreshing,
+    showAddForm,
+    handleHideAddForm,
+    handleToggleAddForm,
+    onRefresh,
+  } = useTaskScreenState();
+  const {
+    handleAddTask,
+    handleToggleTask,
+    handleDeleteTask,
+    handleEditTask,
+    handleClearCompleted,
+  } = useTaskOperations();
 
-  const { isDarkMode, toggleTheme, loadTheme } = useThemeStore();
-
-  const [refreshing, setRefreshing] = useState(false);
-  const [showAddForm, setShowAddForm] = useState(false);
+  // Store hooks for direct state access
+  const { filters, setStatusFilter, setPriorityFilter } = useTaskStore();
+  const { isDarkMode, toggleTheme } = useThemeStore();
 
   const theme: Theme = isDarkMode ? darkTheme : lightTheme;
 
-  // Load tasks and theme on app start
-  useEffect(() => {
-    loadTasks();
-    loadTheme();
-  }, [loadTasks, loadTheme]);
-
-  // Filter and sort tasks
-  const filteredTasks = sortTasksByPriority(filterTasks(tasks, filters));
-  const taskCounts = getTaskCounts(tasks);
-
-  const handleAddTask = (text: string, priority: Priority) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    addTask(text, priority);
-    setShowAddForm(false);
+  // Enhanced add task handler that closes modal
+  const handleAddTaskWithClose = (text: string, priority: Priority) => {
+    handleAddTask(text, priority);
+    handleHideAddForm();
   };
-
-  const handleCancelAddTask = () => {
-    setShowAddForm(false);
-  };
-
-  const handleToggleTask = (id: string) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    toggleTask(id);
-  };
-
-  const handleDeleteTask = (id: string) => {
-    Alert.alert('Delete Task', 'Are you sure you want to delete this task?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: () => {
-          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-          deleteTask(id);
-        },
-      },
-    ]);
-  };
-
-  const handleEditTask = (id: string, text: string, priority: Priority) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    editTask(id, text, priority);
-  };
-
-  const handleClearCompleted = () => {
-    if (taskCounts.completed === 0) {
-      Alert.alert(
-        'No Completed Tasks',
-        'There are no completed tasks to clear.'
-      );
-      return;
-    }
-
-    Alert.alert(
-      'Clear Completed Tasks',
-      `Are you sure you want to delete ${taskCounts.completed} completed task(s)?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Clear',
-          style: 'destructive',
-          onPress: () => {
-            LayoutAnimation.configureNext(
-              LayoutAnimation.Presets.easeInEaseOut
-            );
-            clearCompleted();
-          },
-        },
-      ]
-    );
-  };
-
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await loadTasks();
-    setRefreshing(false);
-  };
-
-  const renderTaskItem = ({ item }: { item: Task }) => (
-    <TaskItem
-      task={item}
-      onToggle={handleToggleTask}
-      onDelete={handleDeleteTask}
-      onEdit={handleEditTask}
-      theme={theme}
-    />
-  );
-
-  const renderEmptyState = () => (
-    <View style={styles.emptyContainer}>
-      <IconButton
-        icon="check-all"
-        size={48}
-        iconColor={theme.colors.textSecondary}
-      />
-      <Appbar.Content
-        title="No tasks found"
-        titleStyle={[styles.emptyTitle, { color: theme.colors.textSecondary }]}
-      />
-      <Text
-        style={[styles.emptySubtitle, { color: theme.colors.textSecondary }]}
-      >
-        Add a new task to get started!
-      </Text>
-    </View>
-  );
 
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <Appbar.Header style={{ backgroundColor: theme.colors.surface }}>
-        <Appbar.Content
-          title="Task Manager"
-          titleStyle={{ color: theme.colors.text }}
-        />
-        <Appbar.Action
-          icon={isDarkMode ? 'weather-sunny' : 'weather-night'}
-          onPress={toggleTheme}
-        />
-        <Appbar.Action icon="delete-outline" onPress={handleClearCompleted} />
-      </Appbar.Header>
+      <TaskHeader
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        onClearCompleted={handleClearCompleted}
+      />
 
       <TaskCounter
         total={taskCounts.total}
@@ -201,48 +95,40 @@ const TaskScreen: React.FC = () => {
         theme={theme}
       />
 
-      <FlatList
-        data={filteredTasks}
-        renderItem={renderTaskItem}
-        keyExtractor={item => item.id}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        ListEmptyComponent={renderEmptyState}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
+      <TaskList
+        tasks={filteredTasks}
+        refreshing={refreshing}
+        showAddForm={showAddForm}
+        onRefresh={onRefresh}
+        onToggleTask={handleToggleTask}
+        onDeleteTask={handleDeleteTask}
+        onEditTask={handleEditTask}
+        onToggleAddForm={handleToggleAddForm}
+        theme={theme}
       />
 
-      <Portal>
-        <FAB
-          icon={showAddForm ? 'close' : 'plus'}
-          style={[styles.fab, { backgroundColor: theme.colors.primary }]}
-          onPress={() => setShowAddForm(!showAddForm)}
-        />
-      </Portal>
+      {/* Add Task Modal */}
 
-      {showAddForm && (
-        <Modal
-          visible={showAddForm}
-          onDismiss={handleCancelAddTask}
-          contentContainerStyle={[
-            styles.modalContainer,
-            { backgroundColor: theme.colors.surface },
-          ]}
-          theme={{
-            colors: {
-              backdrop: 'rgba(0, 0, 0, 0.5)',
-              surface: theme.colors.surface,
-            },
-          }}
-        >
-          <AddTaskForm
-            onAddTask={handleAddTask}
-            onCancel={handleCancelAddTask}
-            theme={theme}
-          />
-        </Modal>
-      )}
+      <Modal
+        visible={showAddForm}
+        onDismiss={handleHideAddForm}
+        contentContainerStyle={[
+          styles.modalContainer,
+          { backgroundColor: theme.colors.surface },
+        ]}
+        theme={{
+          colors: {
+            backdrop: 'rgba(0, 0, 0, 0.5)',
+            surface: theme.colors.surface,
+          },
+        }}
+      >
+        <AddTaskForm
+          onAddTask={handleAddTaskWithClose}
+          onCancel={handleHideAddForm}
+          theme={theme}
+        />
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -250,31 +136,6 @@ const TaskScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  listContainer: {
-    flexGrow: 1,
-    paddingBottom: 80,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 32,
-  },
-  emptyTitle: {
-    fontSize: 18,
-    textAlign: 'center',
-  },
-  emptySubtitle: {
-    fontSize: 14,
-    textAlign: 'center',
-    marginTop: 8,
-  },
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
   },
   modalContainer: {
     padding: 0,

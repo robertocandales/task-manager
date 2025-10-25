@@ -75,25 +75,35 @@ TaskManagerApp/
 │   │   ├── TaskItem.tsx     # Individual task component
 │   │   ├── FilterButtons.tsx # Task filtering controls
 │   │   ├── TaskCounter.tsx  # Statistics display
-│   │   └── ApiStatus.tsx    # API connection indicator
-│   ├── screens/             # Screen components
-│   │   └── TaskScreen.tsx   # Main task management screen
+│   │   ├── ApiStatus.tsx    # API connection indicator
+│   │   ├── EmptyState.tsx   # Empty state component
+│   │   ├── TaskHeader.tsx   # Reusable header component
+│   │   ├── TaskList.tsx     # Task list with FAB
+│   │   └── index.ts         # Component exports
+│   ├── hooks/               # Custom hooks (Business Logic)
+│   │   ├── useTaskOperations.ts # Task CRUD operations
+│   │   ├── useTaskScreenState.ts # UI state management
+│   │   ├── useTaskData.ts   # Data processing & filtering
+│   │   └── index.ts         # Hook exports
+│   ├── screens/             # Screen components (Composition Layer)
+│   │   ├── TaskScreen.tsx   # Main task management screen
+│   │   └── index.ts         # Screen exports
 │   ├── navigation/          # Navigation configuration
-│   │   └── AppNavigator.tsx # App navigation setup
+│   │   ├── AppNavigator.tsx # App navigation setup
+│   │   └── index.ts         # Navigation exports
 │   ├── store/               # State management
 │   │   ├── taskStore.ts     # Main task store (smart API/local)
-│   │   ├── taskStoreWithAPI.ts # API-specific store
-│   │   ├── taskStoreLocal.ts # Local storage store
 │   │   └── themeStore.ts    # Theme management
 │   ├── services/            # API services
-│   │   └── apiService.ts    # REST API client
-│   ├── utils/               # Utility functions
-│   │   ├── taskUtils.ts     # Task filtering/sorting logic
-│   │   └── theme.ts         # Theme definitions
+│   │   ├── apiService.ts    # REST API client
+│   │   └── index.ts         # Service exports
+│   ├── config/              # Configuration
+│   │   └── index.ts         # App configuration
 │   ├── types/               # TypeScript type definitions
 │   │   └── index.ts         # Shared interfaces
-│   └── config/              # Configuration
-│       └── index.ts          # App configuration
+│   └── utils/               # Utility functions
+│       ├── taskUtils.ts     # Task filtering/sorting logic
+│       └── theme.ts         # Theme definitions
 ├── .husky/                  # Git hooks
 ├── eslint.config.js         # ESLint configuration
 ├── .prettierrc              # Prettier configuration
